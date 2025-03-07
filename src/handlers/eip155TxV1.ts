@@ -1,6 +1,11 @@
-import { TransactionData } from "@/types/webhook";
+import { Eip155TransactionData } from "@/types/webhook";
+import { Request, Response } from "express";
 
-export async function handleEIP155TxV1(transactions: TransactionData[]) {
+export async function handleEIP155TxV1(req: Request, res: Response) {
+  // @IMPORTANT: Acknowledge webhook immediately.
+  res.status(204).send();
+
+  const transactions: Eip155TransactionData[] = req?.body?.data || [];
   for (const tx of transactions) {
     try {
       // Log transaction details
@@ -19,7 +24,7 @@ export async function handleEIP155TxV1(transactions: TransactionData[]) {
   }
 }
 
-async function handleInbound(tx: TransactionData) {
+async function handleInbound(tx: Eip155TransactionData) {
   // Implement your inbound transaction logic here
   // For example:
   // - Update user balances
@@ -28,7 +33,7 @@ async function handleInbound(tx: TransactionData) {
   // - Trigger downstream processes
 }
 
-async function handleOutbound(tx: TransactionData) {
+async function handleOutbound(tx: Eip155TransactionData) {
   // Implement your outbound transaction logic here
   // For example:
   // - Update user balances
